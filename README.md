@@ -27,16 +27,24 @@
 
 1. 在 Github 中 Fork Action-OpenWrt-Rpi 仓库至你的账户下。
 
-2. 复制 template 文件夹中所编译 "设备-版本" 的 config 文件至项目根目录。以下步骤任选其一即可:
+2. 复制 template/config 文件夹中所编译 "设备-版本" 的 config 文件至 `项目根目录`。
+
+   复制 template/workflows 文件夹中所编译 "设备-版本" 的 yml 文件至 `.github/workflows` 目录。
+
+   同时，项目已预置适用于树莓派 2~4 的 Lean 大版 OpenWrt 配置文件，可开箱即用。
+
+   以下步骤任选其一即可:
+
+   (以 config 文件为例，yml 文件同理)
 
    (1) 使用 git 命令:
-
+   
    git clone 你 **Fork 后的项目** 到本地，将所需 config 文件从 template 目录中复制到项目根目录，然后 git add & git commit & git push。
-
+   
    (如果你不熟悉 git 命令，不建议采用此方法)
-
-   (2) 在 Github 桌面版网页中在线操作 (推荐):
-
+   
+   (2) 在 Github 桌面版网页中在线操作:
+   
    在 Github 仓库中的 template 文件夹找到你想要编译的 config 文件，全选文件内容并复制，接着回到项目根目录，新建一个文件，粘贴刚刚复制的内容，同时此文件的文件名需确保与 template 文件夹中的相应文件名 **完全一致** 。完成以上步骤后提交即可。
 
 完成以上两步后，Github Action 即可自动开始编译。

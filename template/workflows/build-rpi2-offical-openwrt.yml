@@ -6,7 +6,7 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Build Raspberry Pi 2 Lean's OpenWrt
+name: Build Raspberry Pi 2 Offical OpenWrt
 
 on: 
   release:
@@ -15,17 +15,17 @@ on:
     branches: 
       - master
     paths:
-      - 'rpi2-lean-openwrt.config'
+      - 'rpi2-offical-openwrt.config'
 #  schedule:
 #    - cron: 0 18 * * *
 #  watch:
 #    types: [started]
 
 env:
-  REPO_URL: https://github.com/coolsnowwolf/lede
+  REPO_URL: https://github.com/openwrt/openwrt
   REPO_BRANCH: master
-  CONFIG_FILE: rpi2-lean-openwrt.config
-  DIY_SH: lean-openwrt.sh
+  CONFIG_FILE: rpi2-offical-openwrt.config
+  DIY_SH: offical-openwrt.sh
   FREE_UP_DISK: true
   SSH_ACTIONS: false
   TZ: Asia/Shanghai
@@ -65,7 +65,6 @@ jobs:
     - name: Update Feeds
       run: |
        cd openwrt
-       echo "src-git lienol https://github.com/Lienol/openwrt-package" >> feeds.conf.default
        ./scripts/feeds update -a
 
     - name: Install feeds
@@ -118,8 +117,8 @@ jobs:
       uses: actions/upload-artifact@master
       if: steps.compile.outputs.status == 'success'
       with:
-        name: config.seed
-        path: openwrt/bin/targets/brcm2708/bcm2709/config.seed
+        name: config.buildinfo
+        path: openwrt/bin/targets/brcm2708/bcm2709/config.buildinfo
         
     - name: Upload Packages
       uses: actions/upload-artifact@master
