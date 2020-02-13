@@ -15,7 +15,7 @@ on:
     branches: 
       - master
     paths:
-      - 'r619ac-lean-openwrt.config'
+      - 'gdock-lean-openwrt.config'
 #  schedule:
 #    - cron: 0 18 * * *
 #  watch:
@@ -24,7 +24,7 @@ on:
 env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
-  CONFIG_FILE: r619ac-lean-openwrt.config
+  CONFIG_FILE: gdock-lean-openwrt.config
   DIY_SH: lean-openwrt.sh
   FREE_UP_DISK: true
   SSH_ACTIONS: false
