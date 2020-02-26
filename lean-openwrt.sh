@@ -10,7 +10,7 @@
 
 # Clone community packages to package/community
 mkdir package/community
-cd package/community
+pushd package/community
 
 # Add mentohust & luci-app-mentohust.
 git clone https://github.com/BoringCat/luci-app-mentohust
@@ -28,10 +28,6 @@ git clone https://github.com/Leo-Jo/luci-app-koolproxyR
 # Add luci-app-onliner (need luci-app-nlbwmon)
 git clone https://github.com/rufengsuixing/luci-app-onliner
 
-# Add luci-app-dockerman
-git clone https://github.com/lisaac/luci-lib-docker
-git clone https://github.com/lisaac/luci-app-dockerman
-
 # Add luci-app-adguardhome
 git clone https://github.com/rufengsuixing/luci-app-adguardhome
 
@@ -47,8 +43,15 @@ cp luci-app-diskman/Parted.Makefile parted/Makefile
 git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon
 rm -rf ../lean/luci-theme-argon
 
+# Add smartdns
+svn co https://github.com/pymumu/smartdns/trunk/package/openwrt ../smartdns
+git clone https://github.com/SuLingGG/luci-app-smartdns ../luci-app-smartdns
+
+# Add OpenAppFilter
+git clone https://github.com/destan19/OpenAppFilter
+popd
+
 # Change timezone
-cd ../..
 sed -i "s/'UTC'/'CST-8'\n        set system.@system[-1].zonename='Asia\/Shanghai'/g" package/base-files/files/bin/config_generate
 
 # Change default theme
