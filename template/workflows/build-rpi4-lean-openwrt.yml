@@ -16,8 +16,8 @@ on:
       - master
     paths:
       - 'rpi4-lean-openwrt.config'
-#  schedule:
-#    - cron: 0 18 * * *
+  schedule:
+    - cron: 0 18 * * *
 #  watch:
 #    types: [started]
 
@@ -85,8 +85,10 @@ jobs:
         [ -e files ] && mv files openwrt/files
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         chmod +x $DIY_SH
+        chmod +x enable-rpi4-wifi.sh
         cd openwrt
         ../$DIY_SH
+        ../enable-rpi4-wifi.sh
         make defconfig
 
     - name: SSH connection to Actions
