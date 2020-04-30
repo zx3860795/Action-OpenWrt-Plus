@@ -8,7 +8,7 @@
 
 ## 写在前面
 
-本项目基本保留了 [P3TERX/Actions-OpenWrt](P3TERX/Actions-OpenWrt) 项目的所有特性，
+本项目基本保留了 [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) 项目的特性，
 
 建议首先阅读 P3Terx 大佬的云编译教程后再使用本项目:
 
