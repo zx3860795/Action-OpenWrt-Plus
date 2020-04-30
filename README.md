@@ -1,78 +1,103 @@
-# [Action-OpenWrt-Rpi](https://github.com/SuLingGG/Action-OpenWrt-Rpi)
+# [Action-OpenWrt-Plus](https://github.com/SuLingGG/Action-OpenWrt-Rpi)
 
-## 写在前面
-
-本项目基于 P3TERX 的 Actions-OpenWrt 项目:
+本项目基于P3TERX 大佬的 Actions-OpenWrt 项目:
 
 <https://github.com/P3TERX/Actions-OpenWrt>
 
-本项目还参考了以下项目的部分代码:
+特此感谢～
 
-<https://github.com/project-openwrt/The-Compiled-OpenWrt-Firmwares>
+## 写在前面
 
-<https://github.com/ljk4160/GDOCK>
+本项目基本保留了 [P3TERX/Actions-OpenWrt](P3TERX/Actions-OpenWrt) 项目的所有特性，
 
-特此感谢~
+建议首先阅读 P3Terx 大佬的云编译教程后再使用本项目:
 
-## 功能实现
+[使用 GitHub Actions 云编译 OpenWrt](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
 
-此项目基于 Github Action 平台，可实现以下功能:
+在此之上，本项目还添加了以下特性:
 
-- 自动搭建 OpenWrt 编译环境
-- 自动拉取 OpenWrt 代码及一些优秀的第三方软件包项目
-- 自动构建适用于树莓派各版本的 OpenWrt 固件
-- 固件构建完毕后自动发布相应 Action 任务首页以供下载
+1. 提供基于 Lean 大 / 官方 OpenWrt snapshot / Project-OpenWrt 三种源码的示例文件模板；
+2. 添加了若干第三方优秀的 OpenWrt 软件包项目 (添加了哪些软件包可在 DIY 脚本文件中查看)；
+3. 支持一键编译所有 kmod 并集成进固件，在从软件源安装 ipk 时，所有 komd 软件包将从本地获取 (对某些不被 OpenWrt 官方支持的设备很有用)，从此摆脱 komd 冲突问题。并可根据不同平台智能修改软件源，无需进行额外设置；
+4. 支持固件编译完成后生成 package-server，方便在 Windows 下建立本地软件源 (双击即用)，对不方便集成所有 kmod 进固件的小 ROM 设备来说很有用；
+5. 对于官方 OpenWrt Snapshot 源码，可自动转换第三方软件包源码翻译以适配 Luci 19.07，并可自动移除二进制文件的 upx 压缩 (提高性能)；
+
+注:
+
+1. 本项目已集成了 Lienol 的软件包 Feeds，故无需手动添加；
+2. 本项目默认保留了 luci-app-ssr-plus 和 luci-app-passwall，故无需做其他处理。
 
 ## 使用方法
 
-1. 在 Github 中 Fork Action-OpenWrt-Rpi 仓库至你的账户下。
+以下三种方法任选其一:
 
-2. 复制 template/config 文件夹中所编译 "设备-版本" 的 config 文件至 `项目根目录`。
-
-   复制 template/workflows 文件夹中所编译 "设备-版本" 的 yml 文件至 `.github/workflows` 目录。
-
-   同时，项目已预置适用于树莓派 2~4 的 Lean 大版 OpenWrt 配置文件，可开箱即用。
-
-   以下步骤任选其一即可:
-
-   (以 config 文件为例，yml 文件同理)
-
-   (1) 使用 git 命令:
-   
-   git clone 你 **Fork 后的项目** 到本地，将所需 config 文件从 template 目录中复制到项目根目录，然后 git add & git commit & git push。
-   
-   (如果你不熟悉 git 命令，不建议采用此方法)
-   
-   (2) 在 Github 桌面版网页中在线操作:
-   
-   在 Github 仓库中的 template 文件夹找到你想要编译的 config 文件，全选文件内容并复制，接着回到项目根目录，新建一个文件，粘贴刚刚复制的内容，同时此文件的文件名需确保与 template 文件夹中的相应文件名 **完全一致** 。完成以上步骤后提交即可。
-
-完成以上两步后，Github Action 即可自动开始编译。
+1. Fork 本项目，在本地搭建 OpenWrt 环境，make menuconfig 生成 .config 配置文件后将 .config 文件上传到项目 config 文件夹下的相应文件夹下(lean/offical/project)；
+2. 使用 tmate 提供的 SSH 连接到 Github Action 机器，进行 make menuconfig 生成配置文件后开始编译，详见 P3Terx 大佬的编译教程中: [云 menuconfig (SSH 连接到 Actions)](https://p3terx.com/archives/build-openwrt-with-github-actions.html#toc_20) 一节；
+3. 直接修改我提供的 config 文件(这些文件存放在 template 文件夹下)，将其上传到 Github 项目的相应文件夹下。
 
 ## 触发方式
 
 本项目采用两种触发方式:
 
-1. 检测到项目根目录下指定文件名.config 文件发生变动(下文说明)
-
-2. 新的 Release 被发布
+1. 检测到项目 config/[lean/offical/project] 下的 *.config 文件被上传或者内容发生变动；
+2. 新的 Release 被发布。
 
 此外，Github Action 支持多种触发方式，比如定时触发、Star 触发等，详细操作方法请前往 [P3terx 大佬的博客](https://p3terx.com/archives/build-openwrt-with-github-actions.html) 中查看~
 
-## 关于配置文件
+## 变量说明
 
-1. 本项目提供的配置文件与博客中 "[自编译 OpenWrt 固件](https://mlapp.cn/369.html)" 功能基本相同。
+可修改本项目 .gitbub/workflows 文件夹下存放 Github Action 工作流配置文件中的 env 一节来实现相应功能:
 
-2. 配置文件涵盖树莓派 1\~4 四个设备，每个设备又分为官方版 OpenWrt 与 Lean 大版 OpenWrt 两个配置文件，其中适用于树莓派 2 的配置文件通用于树莓派 2\~4，除此之外的其他配置文件互不通用。
+```
+REPO_URL: # OpenWrt 源码地址
+REPO_BRANCH: # OpenWrt 源码分支
+CONFIG_FILE: # config 配置文件所在路径
+DIY_SH: # DIY 脚本所在路径
+FEEDS_CONF: # feeds.conf.default 在项目中的文件名
+SSH_ACTIONS: # 是否使用 “云 menuconfig”
+KMODS_IN_FIRMWARE: # 是否集成 kmod 软件包进固件(小 ROM 机器慎用)
+UPLOAD_BIN_DIR: # 是否上传整个 bin 文件夹至 Github Action (包含固件/软件包/其他文件)
+UPLOAD_FIRMWARE: # 功能同 UPLOAD_BIN_DIR 但未包含软件包
+UPLOAD_COWTRANSFER: # 是否上传固件至奶牛快传
+UPLOAD_WETRANSFER: # 是否上传固件至 WeTransfer
+TZ: # 时区设置
+```
 
-3. 建议直接编辑配置文件增删固件功能，编辑配置文件时只需要增删最顶层的软件包即可，软件包依赖项可不必在配置文件中体现。
+## 目录说明
 
-## 注意事项
 
-1. 在不更改 Github Action 描述文件 ( /github/workflows/yml 文件) 的情况下，项目根目录下 config 文件名须与 template 文件夹下的文件名完全一致。若文件名有出入则不会触发自动编译。
+```
+Action-OpenWrt-Rpi
+├── .github
+│   └── workflows  # Github Action 工作流配置文件夹
+├── config # .config 文件存放文件夹
+├── scripts # 项目脚本文件夹
+│  ├── convert-translation.sh # 第三方软件包翻译转换脚本 (用于官方版 OpenWrt )
+│  ├── enable-rpi4-wifi.sh # 用于修复树莓派 4 的 WiFi 问题 (编译树莓派的官方版 OpenWrt 需要取消 yml 文件中 Load Custom Configuration 部分的注释)
+│  ├── lean-openwrt.sh # Lean 版源码应用的 DIY 脚本文件
+│  ├── offical-openwrt.sh # 官方 OpenWrt Snapshot 源码应用的 DIY 脚本文件
+│  ├── project-openwrt.sh # Project-OpenWrt 版源码应用的 DIY 脚本文件
+│  └── remove-upx.sh # 移除二进制文件中的 upx 压缩，以提高性能 (用于官方版 OpenWrt )
+├── server (小型 WEB 服务器，用于 package-server)
+├── template 提供 Lean / 官方 OpenWrt Snapshot / Project-OpenWrt 三种 config 配置文件模板
+├── LICENSE # 项目许可证文件
+└── README.md # 项目描述文件
+```
 
-2. 因 Github Action 限制，编译后生成的固件及相关文件需要登录 Github 帐号方可查看及下载。
+## 鸣谢
 
-3. 因 Github Action 限制，提供下载的文件均为压缩后的 zip 文件，故文件实际下载大小与页面所示大小不符，文件解压后应与页面标识大小相符。
+P3TERX/Actions-OpenWrt (本项目基于此项目):
 
-4. **强烈建议只编译所需固件以节约公共计算资源**。
+<https://github.com/P3TERX/Actions-OpenWrt>
+
+OpenWrt Source Repository:
+
+<https://github.com/openwrt/openwrt/>
+
+Lean's OpenWrt source:
+
+<https://github.com/coolsnowwolf/lede>
+
+CTCGFW's Team:
+
+<https://github.com/project-openwrt>
